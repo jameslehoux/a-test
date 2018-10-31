@@ -1,3 +1,4 @@
+
 import numpy as np
 
 def square(x):
@@ -46,6 +47,12 @@ def mysquaredfunc(x):
 def mytanfunc(x):
     return np.tan(x)
 
+def myrugbyfunc(theta, yend, ystart, x, v):
+    return ystart - yend + x * np.tan(theta) - (0.5 * (x**2 * 9.81)/(v**2)) * (1 + np.tan(theta)**2)
+
+def myrealrugbyfunc(theta):
+    return 1.85 - 1.96 + 20 * np.tan(theta) - (0.5 * (20**2 * 9.81)/(15**2)) * (1 + np.tan(theta)**2)
+
 def mybisection(func, a, b, eps):
     fa = func(a)
     fb = func(b)
@@ -60,3 +67,41 @@ def mybisection(func, a, b, eps):
         else:
             a = x
     return x
+
+def mytrapz(func,a,b,n):
+	integral=0.5*(func(a)+func(b))
+	h=(b-a)/n
+	x=a
+	for i in range(1,n):
+		x=x+h
+		integral=integral+func(x)
+	integral=integral*h
+	return integral
+
+def myintegral(x):
+	return -(x-2)**2+4
+
+def myfindiff(Ta,Tb,x,tend,T0,alpha,dx,dt):
+	nodes = int(x/dx)+1
+
+	Tdist = np.ones(nodes)*T0
+
+	Tdist[0]=Ta
+	Tdist[nodes-1]=Tb
+
+	steps = int(tend/dt) + 1
+	Tnew = np.zeros(nodes)
+
+	Tnew[0] = Ta
+	Tnew[nodes-1] = Tb
+
+	for p in range(1,steps):
+		for i in range (1,nodes - 1):
+			Tnew[i] = ((alpha * dt) / dx**2) * (Tdist[i+1] + Tdist[i-1])\
+			 + (1 - ((2*alpha*dt)/(dx**2)))*Tdist[i]
+
+		print(Tdist)
+		Tdist = Tnew[:]
+		print(Tdist)
+
+	return Tdist
